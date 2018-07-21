@@ -1,0 +1,62 @@
+version: "3"
+services:
+  MatchMaker:
+    container_name: MatchMaker
+    build: MatchMaker/.
+    image: matchmaker
+    environment:
+      MATCHMAKER_PORT: 5000
+      TRANSACTION_MANAGER: http://TransactionManager:6000
+      KAFKA_ENDPOINT: Kafka:9092
+      ZOOKEEPER_ENDPOINT: Zookeeper:2181
+    depends_on:
+      - TransactionManager
+    external_links:
+      - Kafka
+    ports:
+      - 5000:5000
+      - 6379:6379
+    volumes:
+      - ./MatchMaker/src:/src
+    networks:
+      - custom
+
+  Mongo:
+    image: mongo
+    container_name: Mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: 'root'
+      MONGO_INITDB_ROOT_PASSWORD: 'example'
+    ports:
+      - 27017:27017
+    networks:
+      - custom
+
+  TransactionManager:
+    container_name: TransactionManager
+    build: TransactionManager/.
+    image: transaction_manager
+    environment:
+      TM_PORT: 6000
+      DB_ENDPOINT: Mongo:27017
+      DB_CREDENTIAL: 'root:example'
+      KAFKA_ENDPOINT: Kafka:9092
+      ZOOKEEPER_ENDPOINT: Zookeeper:2181
+    command: tail -f /dev/null
+    links:
+      - Mongo
+    depends_on:
+      - Mongo
+    external_links:
+      - Kafka
+    ports:
+      - 6000:6000
+    volumes:
+      - ./TransactionManager/src:/src
+    networks:
+      - custom
+
+networks:
+  custom:
+    external: true
+

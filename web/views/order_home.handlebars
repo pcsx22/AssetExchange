@@ -1,0 +1,40 @@
+<script src="js/libs/jquery/jquery-3.3.1.min.js"></script>
+
+<link rel="stylesheet" href="css/libs/oj/v5.0.0/alta/oj-alta-min.css" type="text/css" /> 
+<h1>Exchange Platform</h1>
+<div id = "div1">
+
+<span>	
+	<oj-label for="text-input">Order Value: </oj-label>
+	<input type="text" class="form-control" data-bind="value: orderValue" id="usr">
+</span>
+
+<span>	
+	<oj-label for="text-input">Units</oj-label>
+	<input type="text" class="form-control" data-bind="value: orderAmount" id="usr">
+</span><br/><br/>
+<button data-bind="click: sendOrder.bind($data,'buy')" type="button" class="btn btn-primary active">Send Buy Order</button>
+<button data-bind="click: sendOrder.bind($data,'sell')" type="button" class="btn btn-primary active">Send Sell Order</button>
+<div class="oj-flex demo-panelwrapper">
+              <div class="oj-flex-item oj-flex oj-sm-flex-items-6 oj-sm-6 oj-md-6 oj-lg-6 oj-xl-6">
+                <div class="oj-flex-item oj-panel demo-mypanel">
+                  <h3>Buy Orders</h3>
+                  <ul data-bind = "foreach: buyOrders">
+                    <li data-bind="text: $data"></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="oj-flex-item oj-flex oj-sm-flex-items-6 oj-sm-6 oj-md-6 oj-lg-6 oj-xl-6">
+                <div class="oj-flex-item oj-panel demo-mypanel">
+                  <h3>Sell Orders</h3>
+                  <ul data-bind = "foreach: sellOrders">
+                    <li data-bind="text: $data"></li>
+                  </ul>
+                </div>
+              </div>
+</div>
+
+
+</div>
+<script src="js/libs/require/require.js" data-main="js/main"></script>
